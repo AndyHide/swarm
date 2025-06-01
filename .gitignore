@@ -1,3 +1,13 @@
-venv/
+# .gitignore
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.env
+venv/
+*.sqlite
+*.log
+data/cache/
+reports/logs/
+reports/plots/
+.ipynb_checkpoints/

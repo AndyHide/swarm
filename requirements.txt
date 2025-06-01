@@ -1,0 +1,10 @@
+pandas
+numpy
+matplotlib
+plotly
+mplfinance
+ta
+ccxt
+tqdm
+pyyaml
+pydantic
