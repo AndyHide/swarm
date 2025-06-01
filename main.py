@@ -1,30 +1,41 @@
 from core.data_loader import load_ohlcv_with_features
 from core.target_generator import generate_classification_target
-from core.backtester import backtest_signals
+from core.evaluator import evaluate_bots
 
-
-# 1. Загрузка и фичи
-df = load_ohlcv_with_features(
-    pair="BTC/USDT",
-    timeframe="5m",
-    n_candles=5000,
-    mode="last_n"
+from core.bots.simple import (
+    RSIBot,
+    RSIBotStochastic,
+    MACDBot,
+    SmaCrossBot,
+    RSIMACDComboBot,
 )
 
-# 2. Добавляем future_return — для оценки прибыли
-df["future_return"] = (df["close"].shift(-12) - df["close"]) / df["close"]
 
-# 3. Генерация таргетов
+# Шаг 1 — загрузка данных
+df = load_ohlcv_with_features("BTC/USDT", "5m", n_candles=5000)
+df["future_return"] = (df["close"].shift(-12) - df["close"]) / df["close"]
 df = generate_classification_target(df, horizon=12, threshold=0.0015)
 
-# 4. Сигнальная стратегия — RSI + MACD (только покупки)
-def rsi_macd_long(row):
-    if row["rsi_14"] < 30 and row["macd_diff"] > 0:
-        return 1
-    return 0
+# Шаг 2 — список ботов
+bots = [
+    RSIBot(30),
+    RSIBot(35),
+    RSIBotStochastic(30, 0.05),
+    RSIBotStochastic(30, 0.2),
+    MACDBot(zero_cross=True),
+    MACDBot(zero_cross=False),
+    SmaCrossBot(20, 50),
+    RSIMACDComboBot(30),
+]
 
-# 5. Прогон
-results = backtest_signals(df, signal_func=rsi_macd_long)
+# Шаг 3 — прогоним оценку
+results = evaluate_bots(df, bots)
 
-# 6. Результат
-print(results)
+# Шаг 4 — выводим
+for res in results:
+    print(f"{res['bot']}")
+    print(f"  Return:   {res['total_return']:.2%}")
+    print(f"  Accuracy: {res['accuracy']:.2%}")
+    print(f"  Trades:   {res['n_signals']}")
+    print(f"  Params:   {bots[results.index(res)].get_params()}")
+    print("-" * 40)
