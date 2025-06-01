@@ -4,14 +4,10 @@ import ccxt
 import pandas as pd
 from datetime import datetime, timedelta
 from typing import Optional, Literal
-from typing import List, Dict
+from core.feature_engineer import generate_features
 
 
-# Настройки
 CACHE_PATH = "data/cache"
-MIN_DATE = pd.Timestamp("2022-01-01")
-
-# Интервалы для таймфреймов
 TIMEFRAME_DELTA = {
     "1m": timedelta(minutes=1),
     "5m": timedelta(minutes=5),
@@ -22,7 +18,7 @@ TIMEFRAME_DELTA = {
 }
 
 
-def load_ohlcv(
+def load_ohlcv_with_features(
     pair: str,
     timeframe: str,
     mode: Literal["range", "from_date", "last_n", "forward_fill", "recent_days"] = "last_n",
@@ -31,23 +27,22 @@ def load_ohlcv(
     n_candles: Optional[int] = 100000,
     recent_days: Optional[int] = 30,
     min_date: Optional[str] = "2022-01-01",
-    cache: bool = True,
     overwrite_cache: bool = False,
-    verbose: bool = True,
+    verbose: bool = True
 ) -> pd.DataFrame:
     """
-    Универсальный загрузчик исторических свечей с Binance через ccxt.
+    Загружает OHLCV с Binance и автоматически добавляет фичи.
+    Всегда сохраняет объединённый DataFrame в *_full.parquet
     """
     os.makedirs(CACHE_PATH, exist_ok=True)
     binance = ccxt.binance()
     symbol = pair.replace("/", "")
-    filename = f"{symbol}_{timeframe}.parquet"
+    filename = f"{symbol}_{timeframe}_full.parquet"
     filepath = os.path.join(CACHE_PATH, filename)
 
-    # Кэш
-    if cache and os.path.exists(filepath) and not overwrite_cache and mode != "forward_fill":
+    if os.path.exists(filepath) and not overwrite_cache and mode != "forward_fill":
         if verbose:
-            print(f"[CACHE] Загружаю из: {filepath}")
+            print(f"[CACHE] Загружаю: {filepath}")
         return pd.read_parquet(filepath)
 
     now = datetime.utcnow()
@@ -55,7 +50,6 @@ def load_ohlcv(
     since = None
     until = now
 
-    # Определение since и until
     if mode == "range":
         since = pd.Timestamp(start_date)
         until = pd.Timestamp(end_date)
@@ -81,7 +75,7 @@ def load_ohlcv(
     all_ohlcv = []
 
     if verbose:
-        print(f"[{mode.upper()}] {pair} {timeframe} с {since} по {until}...")
+        print(f"[{mode.upper()}] Загружаю {pair} {timeframe} с {since} по {until}")
 
     while since_ms < until_ts:
         chunk = binance.fetch_ohlcv(pair, timeframe, since=since_ms, limit=1000)
@@ -94,75 +88,15 @@ def load_ohlcv(
         if mode == "last_n" and len(all_ohlcv) >= n_candles:
             break
 
-    if not all_ohlcv:
-        raise RuntimeError("Не удалось получить данные с Binance.")
-
-    # Преобразование в DataFrame
     df = pd.DataFrame(all_ohlcv, columns=["timestamp", "open", "high", "low", "close", "volume"])
     df["timestamp"] = pd.to_datetime(df["timestamp"], unit="ms")
     df.set_index("timestamp", inplace=True)
     df = df[~df.index.duplicated(keep="last")].sort_index()
 
-    # Объединение с кэшем (для forward_fill)
-    if mode == "forward_fill" and os.path.exists(filepath):
-        df_old = pd.read_parquet(filepath)
-        df = pd.concat([df_old, df])
-        df = df[~df.index.duplicated(keep="last")].sort_index()
+    df = generate_features(df)
 
-    if cache:
-        df.to_parquet(filepath)
-        if verbose:
-            print(f"[SAVED] Сохранено в кэш: {filepath}")
+    df.to_parquet(filepath)
+    if verbose:
+        print(f"[FULL] Сохранил с фичами: {filepath}")
 
     return df
-
-def load_batch_ohlcv(
-    pairs: List[str],
-    timeframes: List[str],
-    mode: Literal["range", "from_date", "last_n", "forward_fill", "recent_days"] = "last_n",
-    start_date: Optional[str] = None,
-    end_date: Optional[str] = None,
-    n_candles: Optional[int] = 100000,
-    recent_days: Optional[int] = 30,
-    min_date: Optional[str] = "2022-01-01",
-    cache: bool = True,
-    overwrite_cache: bool = False,
-    verbose: bool = True
-) -> Dict[str, Dict[str, pd.DataFrame]]:
-    """
-    Загружает данные по множеству торговых пар и таймфреймов.
-    Возвращает структуру:
-    {
-        "BTC/USDT": {
-            "1m": DataFrame,
-            "5m": DataFrame
-        },
-        "ETH/USDT": {
-            ...
-        }
-    }
-    """
-    results = {}
-    for pair in pairs:
-        if verbose:
-            print(f"\n### Загружаю данные для пары {pair} ###")
-        results[pair] = {}
-        for tf in timeframes:
-            try:
-                df = load_ohlcv(
-                    pair=pair,
-                    timeframe=tf,
-                    mode=mode,
-                    start_date=start_date,
-                    end_date=end_date,
-                    n_candles=n_candles,
-                    recent_days=recent_days,
-                    min_date=min_date,
-                    cache=cache,
-                    overwrite_cache=overwrite_cache,
-                    verbose=verbose
-                )
-                results[pair][tf] = df
-            except Exception as e:
-                print(f"[ERROR] {pair} {tf}: {e}")
-    return results
