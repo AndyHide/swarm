@@ -6,5 +6,6 @@ mplfinance
 ta
 ccxt
 tqdm
+pyarrow
 pyyaml
 pydantic
