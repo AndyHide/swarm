@@ -1,14 +1,21 @@
-from core.genetics.gene_pool import random_genome
-from core.genetics.genetic_ops import mutate_genome, crossover_genomes
+from core.data_loader import load_ohlcv_with_features
+from core.target_generator import generate_classification_target
+from core.genetics.population_runner import run_generation
 
-g1 = random_genome()
-g2 = random_genome()
+# Загружаем данные
+df = load_ohlcv_with_features("BTC/USDT", "5m", n_candles=10000)
+df["future_return"] = (df["close"].shift(-12) - df["close"]) / df["close"]
+df = generate_classification_target(df, horizon=12, threshold=0.0015)
 
-print("Parent A:", g1.describe())
-print("Parent B:", g2.describe())
+print("future_return describe:")
+print(df["future_return"].describe())
 
-child = crossover_genomes(g1, g2)
-mutant = mutate_genome(g1)
+# Первый запуск
+generation = None
 
-print("Child:", child.describe())
-print("Mutant:", mutant.describe())
+for gen_num in range(5):
+    print(f"\n=== Generation {gen_num} ===")
+    generation, results = run_generation(df, previous_genomes=generation, population_size=40)
+
+    top = results[0]
+    print(f"🏆 Best: {top['bot']} | Return: {top['total_return']:.2%} | Acc: {top['accuracy']:.2%} | Trades: {top['n_signals']}")

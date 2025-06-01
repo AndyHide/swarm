@@ -25,7 +25,7 @@ def backtest_signals(
             trades.append((signal, target, is_correct))
 
             if future_return is not None:
-                returns.append(signal * future_return)
+                returns.append(signal * target * abs(future_return))
 
     n = len(trades)
     correct = sum(t[2] for t in trades)

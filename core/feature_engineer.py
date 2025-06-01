@@ -3,9 +3,13 @@ import numpy as np
 import ta
 
 
-def generate_features(df: pd.DataFrame) -> pd.DataFrame:
+def generate_features(df: pd.DataFrame, horizon: int = 12) -> pd.DataFrame:
     """
     Добавляет технические индикаторы и фичи в DataFrame со свечами.
+
+    :param df: OHLCV-таблица
+    :param horizon: горизонтовое окно для расчёта future_return (в свечах)
+    :return: обогащённый DataFrame
     """
     df = df.copy()
 
@@ -47,6 +51,9 @@ def generate_features(df: pd.DataFrame) -> pd.DataFrame:
     # Объём
     df["volume_sma_20"] = ta.trend.sma_indicator(volume, window=20)
     df["volume_spike"] = df["volume"] / df["volume_sma_20"]
+
+    # 🔮 Доходность в будущем
+    df["future_return"] = (df["close"].shift(-horizon) - df["close"]) / df["close"]
 
     df.dropna(inplace=True)
     return df
