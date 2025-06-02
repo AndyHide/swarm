@@ -22,3 +22,16 @@ class Genome:
 
     def describe(self) -> str:
         return f"{self.strategy_type}({self.params})"
+
+    def to_dict(self):
+        return {
+            "strategy_type": self.strategy_type,
+            "params": self.params
+        }
+
+    @staticmethod
+    def from_dict(data: dict):
+        return Genome(
+            strategy_type=data["strategy_type"],
+            params=data["params"]
+        )

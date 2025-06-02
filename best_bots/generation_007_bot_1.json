@@ -1,0 +1,6 @@
+{
+  "strategy_type": "RSIMACDComboBot",
+  "params": {
+    "rsi_th": 20.251972863451808
+  }
+}

@@ -1,0 +1,146 @@
+[
+  {
+    "generation": 0,
+    "timestamp": "2025-06-02T13:00:13.503727",
+    "average_score": 0.15446690950488826,
+    "population_size": 50,
+    "top_bot": {
+      "score": 1.4532948396431387,
+      "accuracy": 0.3125532875269572,
+      "winrate": 0.3125532875269572,
+      "n_signals": 19939
+    }
+  },
+  {
+    "generation": 0,
+    "timestamp": "2025-06-02T13:04:00.561538",
+    "average_score": 0.3345287563139332,
+    "population_size": 50,
+    "top_bot": {
+      "score": 1.4532948396431387,
+      "accuracy": 0.3125532875269572,
+      "winrate": 0.3125532875269572,
+      "n_signals": 19939
+    }
+  },
+  {
+    "generation": 0,
+    "timestamp": "2025-06-02T13:07:24.848590",
+    "average_score": 0.38893416188604313,
+    "population_size": 50,
+    "top_bot": {
+      "score": 1.4532948396431387,
+      "accuracy": 0.3125532875269572,
+      "winrate": 0.3125532875269572,
+      "n_signals": 19939
+    }
+  },
+  {
+    "generation": 1,
+    "timestamp": "2025-06-02T13:07:57.691035",
+    "average_score": -0.00036721515308075006,
+    "population_size": 50,
+    "top_bot": {
+      "score": 0,
+      "accuracy": 0,
+      "winrate": 0,
+      "n_signals": 0
+    }
+  },
+  {
+    "generation": 2,
+    "timestamp": "2025-06-02T13:08:30.970619",
+    "average_score": 0.021489395513887906,
+    "population_size": 50,
+    "top_bot": {
+      "score": 1.0959966200844977,
+      "accuracy": 0.35190682804293216,
+      "winrate": 0.35190682804293216,
+      "n_signals": 4379
+    }
+  },
+  {
+    "generation": 3,
+    "timestamp": "2025-06-02T13:09:03.167485",
+    "average_score": 0.005055553975525067,
+    "population_size": 50,
+    "top_bot": {
+      "score": 0.31265276771135536,
+      "accuracy": 0.38164251207729466,
+      "winrate": 0.38164251207729466,
+      "n_signals": 207
+    }
+  },
+  {
+    "generation": 4,
+    "timestamp": "2025-06-02T13:09:34.937629",
+    "average_score": -9.242501954202923e-05,
+    "population_size": 50,
+    "top_bot": {
+      "score": 0,
+      "accuracy": 0,
+      "winrate": 0,
+      "n_signals": 0
+    }
+  },
+  {
+    "generation": 5,
+    "timestamp": "2025-06-02T13:10:07.132874",
+    "average_score": 0.0,
+    "population_size": 50,
+    "top_bot": {
+      "score": 0,
+      "accuracy": 0,
+      "winrate": 0,
+      "n_signals": 0
+    }
+  },
+  {
+    "generation": 6,
+    "timestamp": "2025-06-02T13:10:39.739313",
+    "average_score": 0.03600752226341512,
+    "population_size": 50,
+    "top_bot": {
+      "score": 1.0517589881626908,
+      "accuracy": 0.34706430568499536,
+      "winrate": 0.34706430568499536,
+      "n_signals": 5365
+    }
+  },
+  {
+    "generation": 7,
+    "timestamp": "2025-06-02T13:11:12.457532",
+    "average_score": 0.0,
+    "population_size": 50,
+    "top_bot": {
+      "score": 0,
+      "accuracy": 0,
+      "winrate": 0,
+      "n_signals": 0
+    }
+  },
+  {
+    "generation": 8,
+    "timestamp": "2025-06-02T13:11:44.913174",
+    "average_score": 0.02020253611751664,
+    "population_size": 50,
+    "top_bot": {
+      "score": 1.0142589687473085,
+      "accuracy": 0.3483842408145197,
+      "winrate": 0.3483842408145197,
+      "n_signals": 4518
+    }
+  },
+  {
+    "generation": 9,
+    "timestamp": "2025-06-02T13:12:17.767745",
+    "average_score": 0.01967065005909144,
+    "population_size": 50,
+    "top_bot": {
+      "score": 1.0050593473446745,
+      "accuracy": 0.37181738366988587,
+      "winrate": 0.37181738366988587,
+      "n_signals": 2278
+    }
+  }
+]
