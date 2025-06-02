@@ -142,5 +142,245 @@
       "winrate": 0.37181738366988587,
       "n_signals": 2278
     }
+  },
+  {
+    "generation": 0,
+    "timestamp": "2025-06-02T13:33:47.413212",
+    "average_score": 0.24730810452954846,
+    "population_size": 50,
+    "top_bot": {
+      "score": 1.4532948396431387,
+      "accuracy": 0.3125532875269572,
+      "winrate": 0.3125532875269572,
+      "n_signals": 19939
+    }
+  },
+  {
+    "generation": 1,
+    "timestamp": "2025-06-02T13:34:21.753983",
+    "average_score": 0.1361531756402666,
+    "population_size": 50,
+    "top_bot": {
+      "score": 0.6277280218137982,
+      "accuracy": 0.3978494623655914,
+      "winrate": 0.3978494623655914,
+      "n_signals": 651
+    }
+  },
+  {
+    "generation": 2,
+    "timestamp": "2025-06-02T13:34:55.151306",
+    "average_score": 0.14857725117198797,
+    "population_size": 50,
+    "top_bot": {
+      "score": 1.0538655121915221,
+      "accuracy": 0.3471290082028337,
+      "winrate": 0.3471290082028337,
+      "n_signals": 5364
+    }
+  },
+  {
+    "generation": 3,
+    "timestamp": "2025-06-02T13:35:28.458055",
+    "average_score": 0.09052739108545334,
+    "population_size": 50,
+    "top_bot": {
+      "score": 0.6277280218137982,
+      "accuracy": 0.3978494623655914,
+      "winrate": 0.3978494623655914,
+      "n_signals": 651
+    }
+  },
+  {
+    "generation": 4,
+    "timestamp": "2025-06-02T13:36:01.432480",
+    "average_score": 0.15696757130749986,
+    "population_size": 50,
+    "top_bot": {
+      "score": 1.0319751320984714,
+      "accuracy": 0.34891416752843846,
+      "winrate": 0.34891416752843846,
+      "n_signals": 4835
+    }
+  },
+  {
+    "generation": 5,
+    "timestamp": "2025-06-02T13:36:35.049669",
+    "average_score": 0.14746206677444196,
+    "population_size": 50,
+    "top_bot": {
+      "score": 0.8959363179755565,
+      "accuracy": 0.3799644339063426,
+      "winrate": 0.3799644339063426,
+      "n_signals": 1687
+    }
+  },
+  {
+    "generation": 6,
+    "timestamp": "2025-06-02T13:37:08.850299",
+    "average_score": 0.10598836312789191,
+    "population_size": 50,
+    "top_bot": {
+      "score": 1.0999057427703398,
+      "accuracy": 0.35834411384217335,
+      "winrate": 0.35834411384217335,
+      "n_signals": 3865
+    }
+  },
+  {
+    "generation": 7,
+    "timestamp": "2025-06-02T13:37:43.391617",
+    "average_score": 0.12783827706447892,
+    "population_size": 50,
+    "top_bot": {
+      "score": 0.6277280218137982,
+      "accuracy": 0.3978494623655914,
+      "winrate": 0.3978494623655914,
+      "n_signals": 651
+    }
+  },
+  {
+    "generation": 8,
+    "timestamp": "2025-06-02T13:38:17.914880",
+    "average_score": 0.14356328984603547,
+    "population_size": 50,
+    "top_bot": {
+      "score": 0.724671498006501,
+      "accuracy": 0.3837118245888802,
+      "winrate": 0.3837118245888802,
+      "n_signals": 1277
+    }
+  },
+  {
+    "generation": 9,
+    "timestamp": "2025-06-02T13:38:52.206895",
+    "average_score": 0.14092691293944243,
+    "population_size": 50,
+    "top_bot": {
+      "score": 0.6499786893672506,
+      "accuracy": 0.3963963963963964,
+      "winrate": 0.3963963963963964,
+      "n_signals": 777
+    }
+  },
+  {
+    "generation": 0,
+    "timestamp": "2025-06-02T13:50:54.920210",
+    "average_score": 0.37674287867224293,
+    "population_size": 50,
+    "top_bot": {
+      "score": 1.4532948396431387,
+      "accuracy": 0.3125532875269572,
+      "winrate": 0.3125532875269572,
+      "n_signals": 19939
+    }
+  },
+  {
+    "generation": 1,
+    "timestamp": "2025-06-02T13:51:29.792665",
+    "average_score": 0.17938368161558477,
+    "population_size": 50,
+    "top_bot": {
+      "score": 1.4532948396431387,
+      "accuracy": 0.3125532875269572,
+      "winrate": 0.3125532875269572,
+      "n_signals": 19939
+    }
+  },
+  {
+    "generation": 2,
+    "timestamp": "2025-06-02T13:52:06.109987",
+    "average_score": 0.08817132570089463,
+    "population_size": 50,
+    "top_bot": {
+      "score": 1.4532948396431387,
+      "accuracy": 0.3125532875269572,
+      "winrate": 0.3125532875269572,
+      "n_signals": 19939
+    }
+  },
+  {
+    "generation": 3,
+    "timestamp": "2025-06-02T13:52:41.934909",
+    "average_score": 0.017268641400013687,
+    "population_size": 50,
+    "top_bot": {
+      "score": 1.002295920887045,
+      "accuracy": 0.3751769702689948,
+      "winrate": 0.3751769702689948,
+      "n_signals": 2119
+    }
+  },
+  {
+    "generation": 4,
+    "timestamp": "2025-06-02T13:53:18.396999",
+    "average_score": 0.008315705796316832,
+    "population_size": 50,
+    "top_bot": {
+      "score": 0.537862410344193,
+      "accuracy": 0.4024691358024691,
+      "winrate": 0.4024691358024691,
+      "n_signals": 405
+    }
+  },
+  {
+    "generation": 5,
+    "timestamp": "2025-06-02T13:53:52.731963",
+    "average_score": 0.00034633260038273715,
+    "population_size": 50,
+    "top_bot": {
+      "score": 0.2874431724237194,
+      "accuracy": 0.3367756741250717,
+      "winrate": 0.3367756741250717,
+      "n_signals": 5229
+    }
+  },
+  {
+    "generation": 6,
+    "timestamp": "2025-06-02T13:54:28.147442",
+    "average_score": 0.03737064321340374,
+    "population_size": 50,
+    "top_bot": {
+      "score": 1.4532948396431387,
+      "accuracy": 0.3125532875269572,
+      "winrate": 0.3125532875269572,
+      "n_signals": 19939
+    }
+  },
+  {
+    "generation": 7,
+    "timestamp": "2025-06-02T13:55:02.445061",
+    "average_score": 0.01549903389103787,
+    "population_size": 50,
+    "top_bot": {
+      "score": 1.4532948396431387,
+      "accuracy": 0.3125532875269572,
+      "winrate": 0.3125532875269572,
+      "n_signals": 19939
+    }
+  },
+  {
+    "generation": 8,
+    "timestamp": "2025-06-02T13:55:38.261243",
+    "average_score": 0.021744012177963068,
+    "population_size": 50,
+    "top_bot": {
+      "score": 1.0186688295613826,
+      "accuracy": 0.3474250576479631,
+      "winrate": 0.3474250576479631,
+      "n_signals": 5204
+    }
+  },
+  {
+    "generation": 9,
+    "timestamp": "2025-06-02T13:56:14.074798",
+    "average_score": 0.0108253619254513,
+    "population_size": 50,
+    "top_bot": {
+      "score": 0.3390877891783585,
+      "accuracy": 0.3867924528301887,
+      "winrate": 0.3867924528301887,
+      "n_signals": 212
+    }
   }
 ]

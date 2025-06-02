@@ -1,6 +1,7 @@
 {
-  "strategy_type": "RSIMACDComboBot",
+  "strategy_type": "SmaCrossBot",
   "params": {
-    "rsi_th": 20.251972863451808
+    "fast": 19,
+    "slow": 68
   }
 }
