@@ -1,7 +1,12 @@
 {
-  "strategy_type": "SmaCrossBot",
+  "strategy_type": "MACDBot",
   "params": {
-    "fast": 19,
-    "slow": 68
-  }
+    "zero_cross": true
+  },
+  "id": "GENOME-D7A07A",
+  "created_at": "2025-06-03T11:43:40.063624",
+  "age": 4,
+  "role": "neutral",
+  "lifespan": 20,
+  "parent_ids": []
 }

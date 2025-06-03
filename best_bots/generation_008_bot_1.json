@@ -1,7 +1,0 @@
-{
-  "strategy_type": "SmaCrossBot",
-  "params": {
-    "fast": 19,
-    "slow": 68
-  }
-}

@@ -5,11 +5,7 @@ import ta
 
 def generate_features(df: pd.DataFrame, horizon: int = 12) -> pd.DataFrame:
     """
-    Добавляет технические индикаторы и фичи в DataFrame со свечами.
-
-    :param df: OHLCV-таблица
-    :param horizon: горизонтовое окно для расчёта future_return (в свечах)
-    :return: обогащённый DataFrame
+    Обогащает свечи техническими фичами и целевой переменной future_return.
     """
     df = df.copy()
 
@@ -19,19 +15,24 @@ def generate_features(df: pd.DataFrame, horizon: int = 12) -> pd.DataFrame:
     df["range"] = df["high"] - df["low"]
     df["body_ratio"] = df["price_change"] / df["range"].replace(0, np.nan)
 
-    # Источники
     close = df["close"]
     high = df["high"]
     low = df["low"]
     volume = df["volume"]
 
-    # Скользящие
-    df["sma_20"] = ta.trend.sma_indicator(close, window=20)
-    df["sma_50"] = ta.trend.sma_indicator(close, window=50)
-    df["ema_20"] = ta.trend.ema_indicator(close, window=20)
+    # Список RSI, SMA и EMA для разных стратегий
+    rsi_periods = [10, 14, 20]
+    sma_periods = [10, 20, 30, 50, 100]
+    ema_periods = [20]
 
-    # RSI
-    df["rsi_14"] = ta.momentum.rsi(close, window=14)
+    for p in rsi_periods:
+        df[f"rsi_{p}"] = ta.momentum.rsi(close, window=p)
+
+    for p in sma_periods:
+        df[f"sma_{p}"] = ta.trend.sma_indicator(close, window=p)
+
+    for p in ema_periods:
+        df[f"ema_{p}"] = ta.trend.ema_indicator(close, window=p)
 
     # MACD
     df["macd"] = ta.trend.macd(close)
@@ -52,8 +53,8 @@ def generate_features(df: pd.DataFrame, horizon: int = 12) -> pd.DataFrame:
     df["volume_sma_20"] = ta.trend.sma_indicator(volume, window=20)
     df["volume_spike"] = df["volume"] / df["volume_sma_20"]
 
-    # 🔮 Доходность в будущем
-    df["future_return"] = (df["close"].shift(-horizon) - df["close"]) / df["close"]
+    # Целевая переменная: future return
+    df["future_return"] = df["close"].shift(-horizon) / df["close"] - 1
 
     df.dropna(inplace=True)
     return df

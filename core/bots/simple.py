@@ -3,102 +3,89 @@ import random
 
 
 class RSIBot(TraderBot):
-    def __init__(self, threshold: float = 30):
-        self.threshold = threshold
+    def __init__(self, rsi_period=14, rsi_entry=30):
+        self.rsi_period = rsi_period
+        self.rsi_entry = rsi_entry
 
     def signal(self, row):
-        if row["rsi_14"] < self.threshold:
-            return 1
-        elif row["rsi_14"] > (100 - self.threshold):
-            return -1
-        return 0
-
-    def describe(self):
-        return f"RSIBot(th={self.threshold})"
-
-    def get_params(self):
-        return {"threshold": self.threshold}
+        value = row.get(f"rsi_{self.rsi_period}")
+        return 1 if value is not None and value < self.rsi_entry else 0
 
 
 class RSIBotStochastic(TraderBot):
-    def __init__(self, threshold: float = 30, randomness: float = 0.1):
-        self.threshold = threshold
-        self.randomness = randomness
+    def __init__(self, rsi_period=14, rsi_entry=30, noise=5):
+        self.rsi_period = rsi_period
+        self.rsi_entry = rsi_entry
+        self.noise = noise
 
     def signal(self, row):
-        rsi = row["rsi_14"]
-        rnd = random.random()
-        if rsi < self.threshold and rnd > self.randomness:
-            return 1
-        elif rsi > (100 - self.threshold) and rnd > self.randomness:
-            return -1
-        return 0
-
-    def describe(self):
-        return f"RSIBotStochastic(th={self.threshold}, rand={self.randomness})"
-
-    def get_params(self):
-        return {"threshold": self.threshold, "randomness": self.randomness}
+        value = row.get(f"rsi_{self.rsi_period}")
+        if value is None:
+            return 0
+        noisy_value = value + random.uniform(-self.noise, self.noise)
+        return 1 if noisy_value < self.rsi_entry else 0
 
 
 class MACDBot(TraderBot):
-    def __init__(self, zero_cross: bool = True):
+    def __init__(self, zero_cross=False):
         self.zero_cross = zero_cross
 
     def signal(self, row):
+        macd = row.get("macd")
+        signal = row.get("macd_signal")
+        if macd is None or signal is None:
+            return 0
         if self.zero_cross:
-            if row["macd"] > 0 and row["macd_signal"] < 0:
-                return 1
-            elif row["macd"] < 0 and row["macd_signal"] > 0:
-                return -1
+            return 1 if macd > 0 and signal < 0 else 0
         else:
-            if row["macd_diff"] > 0:
-                return 1
-            elif row["macd_diff"] < 0:
-                return -1
-        return 0
-
-    def describe(self):
-        return f"MACDBot(zero_cross={self.zero_cross})"
-
-    def get_params(self):
-        return {"zero_cross": self.zero_cross}
+            return 1 if macd > signal else 0
 
 
 class SmaCrossBot(TraderBot):
-    def __init__(self, fast: int = 20, slow: int = 50):
+    def __init__(self, fast=20, slow=50):
         self.fast = fast
         self.slow = slow
 
     def signal(self, row):
-        if row.get(f"sma_{self.fast}") is None or row.get(f"sma_{self.slow}") is None:
+        fast_val = row.get(f"sma_{self.fast}")
+        slow_val = row.get(f"sma_{self.slow}")
+        if fast_val is None or slow_val is None:
             return 0
-        if row[f"sma_{self.fast}"] > row[f"sma_{self.slow}"]:
-            return 1
-        elif row[f"sma_{self.fast}"] < row[f"sma_{self.slow}"]:
-            return -1
-        return 0
-
-    def describe(self):
-        return f"SmaCrossBot({self.fast}>{self.slow})"
-
-    def get_params(self):
-        return {"fast": self.fast, "slow": self.slow}
+        return 1 if fast_val > slow_val else 0
 
 
 class RSIMACDComboBot(TraderBot):
-    def __init__(self, rsi_th: float = 30):
-        self.rsi_th = rsi_th
+    def __init__(self, rsi_period=14, rsi_entry=30):
+        self.rsi_period = rsi_period
+        self.rsi_entry = rsi_entry
 
     def signal(self, row):
-        if row["rsi_14"] < self.rsi_th and row["macd_diff"] > 0:
-            return 1
-        elif row["rsi_14"] > (100 - self.rsi_th) and row["macd_diff"] < 0:
-            return -1
-        return 0
+        rsi_val = row.get(f"rsi_{self.rsi_period}")
+        macd = row.get("macd")
+        signal = row.get("macd_signal")
+        if rsi_val is None or macd is None or signal is None:
+            return 0
+        return 1 if rsi_val < self.rsi_entry and macd > signal else 0
 
-    def describe(self):
-        return f"RSIMACDComboBot(rsi={self.rsi_th})"
 
-    def get_params(self):
-        return {"rsi_th": self.rsi_th}
+# 🎲 Функция для случайного создания бота и его параметров (используется в gene_pool)
+def random_bot_params():
+    strategy_choices = [
+        ("RSIBot", {"rsi_period": random.choice([10, 14, 20]), "rsi_entry": random.randint(20, 40)}),
+        ("RSIBotStochastic", {
+            "rsi_period": random.choice([10, 14, 20]),
+            "rsi_entry": random.randint(20, 40),
+            "noise": random.randint(2, 10)
+        }),
+        ("MACDBot", {"zero_cross": random.choice([True, False])}),
+        ("SmaCrossBot", {
+            "fast": random.choice([10, 20, 30]),
+            "slow": random.choice([50, 100])
+        }),
+        ("RSIMACDComboBot", {
+            "rsi_period": random.choice([10, 14, 20]),
+            "rsi_entry": random.randint(20, 40)
+        }),
+    ]
+    strategy_type, params = random.choice(strategy_choices)
+    return {"strategy_type": strategy_type, "params": params}

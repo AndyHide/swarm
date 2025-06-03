@@ -4,47 +4,38 @@ from core.genetics.genome import Genome
 from core.genetics.gene_pool import GENE_POOL
 
 
-def mutate_genome(genome: Genome, mutation_rate=0.2) -> Genome:
-    """Слегка изменяет один или несколько параметров"""
-    strategy_type = genome.strategy_type
-    params = deepcopy(genome.params)
+def mutate_genome(genome: Genome, mutation_rate: float = 0.2) -> Genome:
+    new_params = deepcopy(genome.params)
 
-    param_funcs = GENE_POOL[strategy_type]
-    for key in params:
-        if random.random() < mutation_rate:
-            params[key] = param_funcs[key]()  # Новое случайное значение
+    for key in new_params:
+        if isinstance(new_params[key], (int, float)) and random.random() < mutation_rate:
+            # Случайная мутация: добавим шум ±10%
+            factor = random.uniform(0.9, 1.1)
+            new_params[key] = type(new_params[key])(new_params[key] * factor)
 
-    # SMA: гарантируем fast < slow
-    if strategy_type == "SmaCrossBot":
-        params["fast"] = min(params["fast"], params["slow"] - 1)
+        elif isinstance(new_params[key], bool) and random.random() < mutation_rate:
+            new_params[key] = not new_params[key]
 
-    return Genome(strategy_type=strategy_type, params=params)
+    return Genome(
+        strategy_type=genome.strategy_type,
+        params=new_params,
+        parent_ids=[genome.id]
+    )
 
 
 def crossover_genomes(g1: Genome, g2: Genome) -> Genome:
-    """Создаёт нового генома, миксуя параметры родителей (если тип совпадает)"""
     if g1.strategy_type != g2.strategy_type:
-        # Несовместимы — выберем случайно одного из родителей
-        return random.choice([g1, g2])
+        return random.choice([g1, g2])  # несовместимые — выбираем случайно
 
-    strategy_type = g1.strategy_type
     params = {}
-
-    for k in g1.params:
-        v1 = g1.params[k]
-        v2 = g2.params[k]
-        if isinstance(v1, (int, float)):
-            # Среднее с шумом
-            base = (v1 + v2) / 2
-            noise = (v1 - v2) * random.uniform(-0.3, 0.3)
-            params[k] = base + noise
-        elif isinstance(v1, bool):
-            params[k] = random.choice([v1, v2])
+    for key in g1.params:
+        if key in g2.params:
+            params[key] = random.choice([g1.params[key], g2.params[key]])
         else:
-            params[k] = random.choice([v1, v2])
+            params[key] = g1.params[key]
 
-    # Спец. обработка SMA
-    if strategy_type == "SmaCrossBot":
-        params["fast"] = min(int(params["fast"]), int(params["slow"]) - 1)
-
-    return Genome(strategy_type=strategy_type, params=params)
+    return Genome(
+        strategy_type=g1.strategy_type,
+        params=params,
+        parent_ids=[g1.id, g2.id]
+    )

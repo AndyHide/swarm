@@ -1,6 +1,7 @@
 import random
 from typing import Dict, Any, Callable
 from core.genetics.genome import Genome
+from core.bots.simple import random_bot_params
 
 # Конфигурация стратегий и допустимых параметров
 GENE_POOL: Dict[str, Dict[str, Callable[[], Any]]] = {
@@ -24,13 +25,6 @@ GENE_POOL: Dict[str, Dict[str, Callable[[], Any]]] = {
 }
 
 
-def random_genome() -> Genome:
-    strategy_type = random.choice(list(GENE_POOL.keys()))
-    param_funcs = GENE_POOL[strategy_type]
-    params = {k: f() for k, f in param_funcs.items()}
-
-    # Спец-ограничение для SMA: fast < slow
-    if strategy_type == "SmaCrossBot":
-        params["fast"] = min(params["fast"], params["slow"] - 1)
-
-    return Genome(strategy_type=strategy_type, params=params)
+def random_genome():
+    bot = random_bot_params()
+    return Genome(strategy_type=bot["strategy_type"], params=bot["params"])
